@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Advanced Initiative System</title> 
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
+		<meta name="keywords" content="Rifts,advanced,initiative, optional rules " /> 
+		<meta name="description" content="An advanced system that helps to keep everyone's attacks distributed throughout the melee" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/ui-darkness/jquery-ui-1.10.3.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="css/advInit.css" type="text/css" media="all" />
+		
+    </head>
+	<body>
+		<div id="content"> 
+			<table id="adv_table">
+				<thead>
+					<tr>
+						<th id="head_remove" class="col_36"><li title="remove character" class="ui-state-default ui-corner-all icon"><span class="ui-icon ui-icon-circle-close"></span></li></th>
+						<th id="head_charState" class="col_35"><li title="character state" class="charState icon"><span class="charIcon ui-icon"></span></li></th>
+						<th id="head_init" class="col_34">Init</th>
+						<th id="head_char" class="col_33">Character</th>
+						<th id="head_attk" class="col_32"># Attk</th>
+						<th id="head_31" class="initNum col_31">31</th>
+						<th id="head_30" class="initNum col_30">30</th>
+						<th id="head_29" class="initNum col_29">29</th>
+						<th id="head_28" class="initNum col_28">28</th>
+						<th id="head_27" class="initNum col_27">27</th>
+						<th id="head_26" class="initNum col_26">26</th>
+						<th id="head_25" class="initNum col_25">25</th>
+						<th id="head_24" class="initNum col_24">24</th>
+						<th id="head_23" class="initNum col_23">23</th>
+						<th id="head_22" class="initNum col_22">22</th>
+						<th id="head_21" class="initNum col_21">21</th>
+						<th id="head_20" class="initNum col_20">20</th>
+						<th id="head_19" class="initNum col_19">19</th>
+						<th id="head_18" class="initNum col_18">18</th>
+						<th id="head_17" class="initNum col_17">17</th>
+						<th id="head_16" class="initNum col_16">16</th>
+						<th id="head_15" class="initNum col_15">15</th>
+						<th id="head_14" class="initNum col_14">14</th>
+						<th id="head_13" class="initNum col_13">13</th>
+						<th id="head_12" class="initNum col_12">12</th>
+						<th id="head_11" class="initNum col_11">11</th>
+						<th id="head_10" class="initNum col_10">10</th>
+						<th id="head_9" class="initNum col_9">9</th>
+						<th id="head_8" class="initNum col_8">8</th>
+						<th id="head_7" class="initNum col_7">7</th>
+						<th id="head_6" class="initNum col_6">6</th>
+						<th id="head_5" class="initNum col_5">5</th>
+						<th id="head_4" class="initNum col_4">4</th>
+						<th id="head_3" class="initNum col_3">3</th>
+						<th id="head_2" class="initNum col_2">2</th>
+						<th id="head_1" class="initNum col_1">1</th>
+					</tr>
+				</thead>
+				<tbody id="adv_tbody">
+					<tr id="placeholder" class="emptyRow">
+						<td class="emptyCell" colspan="36"></td>
+					</tr>
+				</tbody>
+				<tfoot id="adv_tfoot">
+					<tr>
+						<td id="foot_remove">
+							<button id="removeAll" class="ui-state-highlight iconButton" title="Remove all characters"></button>
+						</td>
+						<td id="foot_charState">
+							<button id="resetStates" class="ui-state-highlight iconButton" title="Reset all characters"></button>
+						</td>
+						<td id="foot_init"><button id="resetInit" title="Clear initative for all">reset</button></td>
+						<td id="foot_char">
+							<ul id="sliderControlButtons" class="clearfix">
+								<button id="stepPrev" title="Step combat round back" class="iconButton"></button>
+								<button id="toggleSlider">Toggle Highlights</button>
+								<button id="stepNext" title="Step combat round forward" class="iconButton"></button>
+							</ul>
+						</td>
+						<td id="foot_attk"><button id="resetAttk" title="Clear # of attacks for all">reset</button></td>
+						<td id="foot_prog" colspan="31"><div id="slider"></div></td>
+					</tr>
+				</tfoot>
+				
+			</table>
+			<button id="addChar">Add Character</button>
+			<button id="resetTable">Reset Table</button>
+		</div>
+		<div id="addCharModal">
+				<div><label for="charName">Name:</label><input id="charName" name="charName" type="text" value="" /></div>
+				<div><label for="charAttk"># of attacks:</label><input id="charAttk" name="charAttk" type="text" value="" maxlength="2" /></div>
+				<div><label for="charInit">Initiative:</label><input id="charInit" name="charInit" type="text" value="" maxlength="2" /></div>
+				<div id="buttons">
+					<button id="btnAddChar">Add</button>
+					<button id="btnDone">Done</button>
+				</div>
+		</div>
+	
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	    <script>window.jQuery || document.write('<script src="js/jquery-2.0.3.min.js"><\/script>')</script>
+	    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	    <script>window.jQuery || document.write('<script src="js/jquery-ui-1.10.3.min.js"><\/script>')</script>
+		<script src="js/jquery.cookie.min.js"></script>
+		<script src="js/jquery.total-storage.min.js"></script>
+		<script src="js/advInit.js"></script>
+
+    </body>
+</html>
