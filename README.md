@@ -1,4 +1,13 @@
 # Rifts Advanced Initiative Tracker
 A better way to track initiative when playing Rifts RPG
-## Demo
-[Advanced Initiative Tracker](https://frankieali.github.io/Rifts-Adv-Initiative-Tracker/index.html)
+
+This app helps you split up character attacks across a round, rather than characters taking all attacks at once. It helps to create a better sense of balance across a combat round.
+
+## Version 2
+Built using [Create React App](https://create-react-app.dev/) and [Material-UI](https://material-ui.com/)
+
+## Features
+coming soon
+
+## How to Use
+coming soon
