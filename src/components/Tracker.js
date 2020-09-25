@@ -175,14 +175,16 @@ const Tracker = (props) => {
             )}
           </TableBody>
           <TableFooter>
-            <TableCell></TableCell>
-            <TableCell><Button variant="contained">Reset</Button></TableCell>
-            <TrackerSlider
-              rounds={rounds} 
-              round={round}
-              orientation={orientation} 
-              onChange={handleSlider}
-            />
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell><Button variant="contained">Reset</Button></TableCell>
+              <TrackerSlider
+                rounds={rounds} 
+                round={round}
+                orientation={orientation} 
+                onChange={handleSlider}
+              />
+            </TableRow>
           </TableFooter>
         </Table>
 
