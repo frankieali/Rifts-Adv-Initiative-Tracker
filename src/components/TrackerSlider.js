@@ -37,7 +37,7 @@ const TrackerSlider = (props) => {
   }, 10),[currentValue])
 
   return (
-    <TableCell colspan={rounds} className={`${classes.root} ${orientation} slider`}>
+    <TableCell colSpan={rounds} className={`${classes.root} ${orientation} slider`}>
       <ThemeProvider theme={theme}>
         <Slider
           defaultValue={round}
