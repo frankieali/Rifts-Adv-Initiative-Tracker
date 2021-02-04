@@ -1,9 +1,8 @@
 import React, { useContext } from 'react'
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@material-ui/core'
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { AppContext } from '../context/App.context'
-import SetRounds from './SetRounds'
 import CharacterRow from './CharacterRow'
 import { TrackerColumns, TrackerHeader } from './TrackerGrid'
 import TrackerSlider from './TrackerSlider'
@@ -62,18 +61,32 @@ const useStyles = makeStyles( theme => ({
   tableContainer: {
     display: "inline-block",
     position: 'relative',
-    // '& .slider': {
-    //   position: 'absolute',
-    //   top: 0
-    // }
+    overflow: 'visible',
+    '& .slider': {
+      position: 'absolute',
+      top: 22,
+      right: 13
+    }
   },
   table: {
     minWidth: 650,
     overflow: "hidden",
     '& .active': {
       backgroundColor: 'rgba(0, 140, 203, 0.2)'
+    },
+    '& .noHighlight': {
+      backgroundColor: '#fff'
     }
   },
+  footerConfigs: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    '& label': {
+      paddingRight: 5
+    }
+  }
 
 
 }))
@@ -142,6 +155,13 @@ const Tracker = (props) => {
     })
   }
 
+  const updateRounds = (event) => {
+    dispatch({
+      type:'setRounds',
+      rounds: parseInt(event.target.value)
+    })
+  }
+
   const toggleOrientation = () => {
     dispatch({
       type: "toggleOrientation",
@@ -150,7 +170,6 @@ const Tracker = (props) => {
 
   return (
     <Box m={5} className={classes.root}>
-      <SetRounds rounds={rounds} />
       <TableContainer component={Paper} className={`${classes.tableContainer} ${orientation}`}>
         <Table className={classes.table} size="small">
           <TrackerColumns rounds={rounds} round={round} />
@@ -176,22 +195,35 @@ const Tracker = (props) => {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell></TableCell>
-              <TableCell><Button variant="contained">Reset</Button></TableCell>
-              <TrackerSlider
-                rounds={rounds} 
-                round={round}
-                orientation={orientation} 
-                onChange={handleSlider}
-              />
+              <TableCell><AddCharacter addCharacter={handleAddCharacter} max={rounds} min={1} /></TableCell>
+              <TableCell>Reset</TableCell>
+              <TableCell className='noHighlight' colSpan={rounds} >
+
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
-
+        <TrackerSlider
+          rounds={rounds} 
+          round={round}
+          orientation={orientation} 
+          onChange={handleSlider}
+        />
       </TableContainer>
-      <div>Round: {round}</div>
-      <AddCharacter addCharacter={handleAddCharacter} max={rounds} min={1} />
-      <div><Button onClick={toggleOrientation}>{orientation === "horizontal" ? "vertical" : "hotizontal"}</Button></div>
+      <Box py={4} className={classes.footerConfigs}>
+        <TextField 
+          label="Rounds" 
+          variant="outlined" 
+          type="number"
+          inputProps={{
+            min:10,
+            max:40
+          }}
+          value={rounds}
+          onChange={updateRounds}
+        />
+        <Button onClick={toggleOrientation} variant='outlined'>{orientation === "horizontal" ? "vertical" : "hotizontal"}</Button>
+      </Box>
     </Box>
   )
 }
