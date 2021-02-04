@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Slider, TableCell } from '@material-ui/core'
+import { Box, Slider } from '@material-ui/core'
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import _ from 'underscore'
 
@@ -11,8 +11,8 @@ const useStyles = makeStyles( theme => ({
   root: {
     // flexGrow: 1,
     textAlign: 'left',
-    padding: "5px 14px 0",
-    backgroundColor: "#FFF",
+    // padding: "5px 14px 0",
+    backgroundColor: "transparent",
     '& .MuiSlider-thumb': {
       marginRight: -5,
     },
@@ -37,7 +37,7 @@ const TrackerSlider = (props) => {
   }, 10),[currentValue])
 
   return (
-    <TableCell colSpan={rounds} className={`${classes.root} ${orientation} slider`}>
+    <Box colSpan={rounds} className={`${classes.root} ${orientation} slider`}>
       <ThemeProvider theme={theme}>
         <Slider
           defaultValue={round}
@@ -53,7 +53,7 @@ const TrackerSlider = (props) => {
           style={orientation === 'horizontal' ? {width:`${(28 * (rounds-1))}px`} : {height:`${(28 * (rounds-1))}px`}}
         />
       </ThemeProvider>
-    </TableCell>
+    </Box>
   )
 }
 
