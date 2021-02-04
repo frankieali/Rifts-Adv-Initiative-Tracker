@@ -5,10 +5,15 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles( theme => ({
   square: {
       width: 28,
+      minWidth: 28,
       height: 28,
+      minHeight: 28,
       lineHeight: '26px',
       padding: 1,
-      textAlign: 'center'
+      textAlign: 'center',
+      '&:last-child': {
+        paddingRight: 1
+      }
   }
 }))
 
