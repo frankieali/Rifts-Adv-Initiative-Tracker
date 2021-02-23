@@ -3,9 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import css from 'rollup-plugin-css-only';
-import postcss from 'rollup-plugin-postcss';
-import autoPreprocess from "svelte-preprocess"
+import sveltePreprocess from "svelte-preprocess"
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -42,15 +40,46 @@ export default {
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production
-				dev: !production
+				dev: !production,
+        css: css => {
+          css.write('public/build/bundle.css')
+        },
       },
-      // emitCss: false,
-      // cascade: false,
-      preprocess: autoPreprocess()
+      emitCss: false,
+      // // cascade: false,
+      // preprocess: preprocess({
+      //   sass: {
+      //     includePaths: [
+      //       'src/theme',
+      //       './node_modules'
+      //     ]
+      //   }
+      // })
+      onwarn: (warning, handler) => {
+        // e.g. don't warn on <marquee> elements, cos they're cool
+        if (warning.code === 'css-unused-selector') return;
+
+        // let Rollup handle all other warnings normally
+        handler(warning);
+      },
+      preprocess: sveltePreprocess({
+        defaults: {
+          style: 'scss'
+        },
+        scss: {
+          // prependData: `@import 'src/theme/material-theme';`,
+          includePaths: ['src/theme','node-modules'],
+        }
+      }),
+      // enable run-time checks when not in production
+      // dev: !production,
+      // we'll extract any component CSS out into
+      // a separate file — better for performance
+
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
+		// css({ output: 'bundle.css' }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
@@ -64,19 +93,19 @@ export default {
     commonjs(),
     
     // Once in the "client:" section, and again in the "server:" section.
-    postcss({
-      extensions: ['.scss', '.sass'],
-      extract: false,
-      minimize: true,
-      use: [
-        ['sass', {
-          includePaths: [
-            './src/theme',
-            './node_modules'
-          ]
-        }]
-      ]
-    }),
+    // postcss({
+    //   extensions: ['.scss', '.sass'],
+    //   extract: true,
+    //   minimize: true,
+    //   use: [
+    //     ['sass', {
+    //       includePaths: [
+    //         './src/theme',
+    //         './node_modules'
+    //       ]
+    //     }]
+    //   ]
+    // }),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
