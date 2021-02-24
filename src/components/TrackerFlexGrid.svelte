@@ -1,23 +1,32 @@
 <script>
-  import {createEventDispatcher} from "svelte";
+  import {createEventDispatcher, onMount} from "svelte";
   import Slider from 'svelte-materialify/src/components/Slider'
+  import throttle from 'just-throttle'
 
   export let characters = []
   export let rounds = 20
   export let round = 1
   export let absNegativeRounds = null
   export let squareSize = 32
-  export let vertical = false
+  export let vertical = true
 
   // $:console.log(activeRows)
-  const dispatch = createEventDispatcher();
-  const root = document.documentElement;
+  // const dispatch = createEventDispatcher();
+  // const root = document.documentElement;
   let tableGrid
+  let breakpoints
 
-  let verticalClass = vertical ? "trackerGrid--vertical" : ""
+  $:verticalClass = vertical ? "trackerGrid--vertical" : ""
 
   let currentCol = -1;
   let currentRows = [];
+
+  onMount(async () => {
+    import('svelte-materialify/src/utils/breakpoints').then(({ default: DefaultExport, NamedExport })=> {
+      breakpoints = DefaultExport
+      handleResize()
+    })
+  })
 
   $:styleConfig = [
     `--cell-size: ${squareSize}px`,
@@ -25,26 +34,27 @@
     `--row-count: ${characters.length + 1}`,
   ]
 
-  // Swap two nodes
-  function swap(nodeA, nodeB) {
-    const parentA = nodeA.parentNode;
-    const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
+  // ------ Drag and Drop code ------ //
+  // // Swap two nodes
+  // function swap(nodeA, nodeB) {
+  //   const parentA = nodeA.parentNode;
+  //   const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
 
-    // Move `nodeA` to before the `nodeB`
-    nodeB.parentNode.insertBefore(nodeA, nodeB);
+  //   // Move `nodeA` to before the `nodeB`
+  //   nodeB.parentNode.insertBefore(nodeA, nodeB);
 
-    // Move `nodeB` to before the sibling of `nodeA`
-    parentA.insertBefore(nodeB, siblingA);
-  };
+  //   // Move `nodeB` to before the sibling of `nodeA`
+  //   parentA.insertBefore(nodeB, siblingA);
+  // };
 
-  // Check if `nodeA` is above `nodeB`
-  function isAbove(nodeA, nodeB) {
-    // Get the bounding rectangle of nodes
-    const rectA = nodeA.getBoundingClientRect();
-    const rectB = nodeB.getBoundingClientRect();
+  // // Check if `nodeA` is above `nodeB`
+  // function isAbove(nodeA, nodeB) {
+  //   // Get the bounding rectangle of nodes
+  //   const rectA = nodeA.getBoundingClientRect();
+  //   const rectB = nodeB.getBoundingClientRect();
 
-    return (rectA.top + rectA.height / 2 < rectB.top + rectB.height / 2);
-  }
+  //   return (rectA.top + rectA.height / 2 < rectB.top + rectB.height / 2);
+  // }
 
   // TODO: reorder rows
   // function handleDragStart({target}){
@@ -113,9 +123,18 @@
     })
   }
 
-</script>
+  function moveSlider(e) {
+    round = rounds - parseInt(e.target.innerHTML) + 1
+  }
 
-<div bind:this={tableGrid} class="trackerGrid trackerGrid--sticky {verticalClass}" style={[...styleConfig].join(";")}>
+  function handleResize(e) {
+    let smallAndDown = window.matchMedia(breakpoints['sm-and-down']).matches;
+    vertical = smallAndDown ? true : false
+  }
+
+</script>
+<svelte:window on:resize={throttle(handleResize, 200)}/>
+<div bind:this={tableGrid} class="trackerGrid trackerGrid--sticky {verticalClass}" style={[...styleConfig].join(";")} >
   <div class="trackerGrid__viewport">
     <div class="trackerGrid__tableCol--headers">
       <div class="trackerGrid__tableCol trackerGrid__tableCol--name">
@@ -127,12 +146,17 @@
     </div>
     <div class="trackerGrid__data">
       <div class="trackerGrid__slider">
-        <Slider vertical={vertical} class="slider-currentRound" thumb={customThumb} min={1} max={rounds + absNegativeRounds} step={1} bind:value={round} color="secondary" on:update={handleSliderChange} />
+        <!-- slider orientation requires changes to HTML and event binding. Easier to create two -->
+        {#if vertical}
+        <Slider vertical class="slider-currentRound" thumb={customThumb} min={1} max={rounds + absNegativeRounds} step={1} bind:value={round} color="secondary" on:update={handleSliderChange} />
+        {:else}
+        <Slider class="slider-currentRound" thumb={customThumb} min={1} max={rounds + absNegativeRounds} step={1} bind:value={round} color="secondary" on:update={handleSliderChange} />
+        {/if}
       </div>
       <div class="trackerGrid__table" aria-label="Initiative Tracker">
         {#each Array(rounds) as _, i}
           <div class="trackerGrid__tableCol" class:active={rounds - i === currentCol}>
-            <div class="trackerGrid__tableCol--header">{rounds - i}</div>
+            <div class="trackerGrid__tableCol--header" on:click={moveSlider}>{rounds - i}</div>
             {#each characters as character, j (character.id)}
               <div>{character.attackRounds.includes(rounds - i) ? "X" : ""}</div>
             {/each}
@@ -141,7 +165,7 @@
         {#if absNegativeRounds !== null}
           {#each Array(absNegativeRounds) as _, i}
             <div class="trackerGrid__tableCol" class:active={0 - i === currentCol}>
-              <div class="trackerGrid__tableCol--header"><div>{0 - i}</div></div>
+              <div class="trackerGrid__tableCol--header" on:click={moveSlider}><div>{0 - i}</div></div>
               {#each characters as character, j (character.id)}
                 <div>{character.attackRounds.includes(0 - i) ? "X" : ""}</div>
               {/each}

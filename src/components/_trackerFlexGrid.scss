@@ -9,13 +9,16 @@ $table-regular-row-font-size: map-deep-get($headings, 'subtitle-2', 'size') !def
   --row-count: 14;
   --cell-size: 32px;
 }
+.trackerGrid {
+  display: inline;
+}
 
 .trackerGrid__viewport {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-areas: "header body";
-  // height: 100%;
-  height: 250px;
+  height: 100%;
+  // height: 250px;
   overflow: auto;
   border: thin solid var(--theme-dividers);
 }
@@ -97,6 +100,7 @@ $table-regular-row-font-size: map-deep-get($headings, 'subtitle-2', 'size') !def
   letter-spacing: map-deep-get($headings, 'subtitle-2', 'letter-spacing');
   color: var(--theme-text-secondary);
   padding-bottom: 10px;
+  cursor: pointer;
 }
 
 .trackerGrid__tableCol--name {
@@ -198,6 +202,22 @@ $table-regular-row-font-size: map-deep-get($headings, 'subtitle-2', 'size') !def
     border-right: none;
   }
 
+  .trackerGrid__tableCol--header {
+    padding: 0;
+    align-items: center !important;
+  }
+
+  .trackerGrid__tableCol {
+    grid-template-rows: initial;
+    grid-template-columns: calc(var(--cell-size) + 20px) repeat(calc(var(--row-count) - 1), 1fr);
+    grid-auto-flow: column;
+    > div:last-child {
+      border-bottom: thin solid var(--theme-dividers);
+    }
+    &:last-child > div {
+      border-bottom: none;
+    }
+  }
 
   .trackerGrid__tableCol--name {
     .trackerGrid__tableCol--header {
@@ -217,17 +237,6 @@ $table-regular-row-font-size: map-deep-get($headings, 'subtitle-2', 'size') !def
     .truncate {
       writing-mode: vertical-rl;
       transform: rotate(180deg);
-    }
-  }
-  .trackerGrid__tableCol {
-    grid-template-rows: initial;
-    grid-template-columns: calc(var(--cell-size) + 20px) repeat(calc(var(--row-count) - 1), 1fr);
-    grid-auto-flow: column;
-    > div:last-child {
-      border-bottom: thin solid var(--theme-dividers);
-    }
-    &:last-child > div {
-      border-bottom: none;
     }
   }
 
@@ -258,6 +267,7 @@ $table-regular-row-font-size: map-deep-get($headings, 'subtitle-2', 'size') !def
   }
 
 
+  /* vertical sticky header adjustments */
   &.trackerGrid--sticky {
     .trackerGrid__tableRow--headers {
       box-shadow: none;
