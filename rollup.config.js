@@ -3,7 +3,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import sveltePreprocess from "svelte-preprocess"
+import sveltePreprocess from "svelte-preprocess";
+import visualizer from 'rollup-plugin-visualizer';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -32,9 +33,10 @@ export default {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
-		format: 'iife',
+		format: 'es',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		// file: 'public/build/bundle.js'
+    dir: 'public/build'
 	},
 	plugins: [
 		svelte({
@@ -91,6 +93,14 @@ export default {
 			dedupe: ['svelte']
 		}),
     commonjs(),
+
+    // https://www.npmjs.com/package/rollup-plugin-visualizer
+    visualizer({
+      open: false,
+      template: "treemap", //Which digram type to use: sunburst, treemap, network
+      gzipSize: true,
+      brotliSize: true
+    }),
     
     // Once in the "client:" section, and again in the "server:" section.
     // postcss({
