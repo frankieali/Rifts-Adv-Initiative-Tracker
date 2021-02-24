@@ -11,6 +11,10 @@
     padding: .1em;
     margin: 0 auto;
     max-width: 1240px;
+    height: 100vh;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
     
   }
   

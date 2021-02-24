@@ -1,11 +1,8 @@
 <script>
-
   import Button from 'svelte-materialify/src/components/Button'
   import TextField from 'svelte-materialify/src/components/TextField'
 
   import appStore from '../store/appStore'
-  // import TrackerTable from './TrackerTable.svelte'
-  // import TrackerGrid from './TrackerGrid.svelte'
   import TrackerFlexGrid from './TrackerFlexGrid.svelte'
   import AddCharacterModal from './AddCharacterModal.svelte'
   import { distributeInteger, createUUID } from "../helpers"
@@ -72,7 +69,6 @@
     }
     character.id = createUUID();
     
-    console.log(character)
     appStore.addCharacter(character)
   }
 
@@ -118,17 +114,18 @@
 
 <style lang="scss">
   @import 'svelte-materialify/src/styles/tools/elevation';
+  @import 'svelte-materialify/src/styles/variables';
   // @import 'svelte-materialify/src/components/Table/Table';
   .tracker{
     @include elevation(4);
     padding: 10px;
-    overflow: auto;
+    overflow: hidden;
+    @media #{map-get($display-breakpoints, "sm-and-down")} {
+      flex-grow: 1;
+    }
   }
   .tracker__wrapper {
-    position: relative;
-    // display: inline-block;
-    // width: 400px;
-    // height: 200px;
+    display: inline;
   }
   .action {
     margin-top: 20px;
