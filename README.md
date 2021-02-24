@@ -12,7 +12,7 @@ Built using [Svelte](https://svelte.dev/) and [Svelte Materialify](https://svelt
 - [x] Vertical layout - the table can switch to a vertical layout for mobile devices. Names and round numbers with switch axis
 - [x] Sticky headers - table headers stick when scrolling
 - [x] Keyboard controls - arrows left and right. More to come.
-- [ ] Auto switch layouts for responsive breakpoints
+- [x] Auto switch layouts for responsive breakpoints
 - [ ] Name Chip component - reveals additional details for mobs
 - [ ] Update Mob Initiative - from Name Chip
 - [ ] Remove Mob - from Name Chip
